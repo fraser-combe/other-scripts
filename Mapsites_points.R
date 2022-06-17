@@ -5,9 +5,7 @@
 install.packages(c("cowplot", "googleway", "ggplot2", "ggrepel","ggspatial", "libwgeom", "sf", "rnaturalearth", "rnaturalearthdata","ggthemes"))
 
 library("ggplot2")
-theme_set(theme_bw())
 library("sf")  
-
 library("rnaturalearth")
 library("rnaturalearthdata")
 library("ggthemes")
@@ -29,8 +27,6 @@ ggplot(data = world) +
   ###This sets coords for boundaries of maps
   coord_sf(xlim = c(-172.15, -79.12), ylim = c(19.97, 71.2), expand = FALSE)
 
-
-library("sf")
 ##read in sites data here example Sorex Cinereus
 ##Column 1 Population column 2 Latitude column 3 Longitude (columns names must match in the script below)
 sites<-read.csv(paste("~/sites_Sorex_C.csv", sep="" ))
@@ -61,3 +57,6 @@ P + theme(panel.grid.major = element_line(colour = gray(0.5), linetype = "dashed
           
          # If you want to color the labels manually use:
 P + scale_color_manual(values=c("green", "red", "purple", "blue"))
+
+P
+dev.off()
