@@ -1,0 +1,76 @@
+# install.packages("areaplot")
+library(areaplot)
+library(dplyr)
+library(ggplot2)
+df<-read.csv(file.choose())
+df
+# X-axis variable
+x <- df$Year
+x
+# Variables to be stacked
+y <- df[, c(2, 3, 4,5)]
+y
+# Colors
+cols <- hcl.colors(6, palette = "Dark2")
+df$
+
+ggplot(df, aes(x=year, y=price, fill=group)) +
+geom_area(alpha=0.6 , size=0.5, colour="white") +
+geom_text(aes(year, total, label = total, fill = NULL), data = totals, vjust=-1) + 
+theme_classic()
+
+df[ ,list(sum=sum(price)), by=group]
+#create totals
+totals <- df %>%
+  group_by(year) %>%
+  summarize(total = sum(price))
+geom_text(aes(year, total, label = total, fill = NULL), data = totals)
+geom_text(
+  aes(label = after_stat(y), group = year), 
+  stat = 'summary', fun = sum, vjust = -1
+)
+
+###Another version stacked bar plot white text more professional looking plot
+p = ggplot(df, 
+           aes(fill=group, 
+               y=price, 
+               x=year, 
+               label=format(price, 
+                            big.mark = ",", 
+                            decimal.mark = ".", 
+                            scientific = FALSE),
+           )) + 
+  geom_bar(position="stack", 
+           stat="identity") + 
+  geom_text(size=3, 
+            position = position_stack(vjust=0.5,), 
+            color='white',
+            family = "Franklin Gothic Book",
+            fontface = 'bold') + 
+  ggtitle("FastPAS computing cost projection")+
+  theme(plot.title = element_text(family="Franklin Gothic Demi Cond",size=25,
+                                  hjust = 0.5),
+        axis.title = element_text(family = "Franklin Gothic Book",),
+        axis.text = element_text(family = "Franklin Gothic Book",size=25),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.title.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        legend.position = "right",
+        legend.text = element_text(family = "Franklin Gothic Book",size =15),
+        legend.title = element_blank(),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+  ) +
+  geom_text(aes(year, total, label = total, fill = NULL), data = totals, vjust=-1) + 
+  scale_fill_manual(values = c("#3869A2",
+                               "#0F3859",
+                               "#CC7B28",
+                               "#F4BC46",
+                               "#79A03F"))
+
+p
+ggsave('plot.jpg', p) 
+getwd()
